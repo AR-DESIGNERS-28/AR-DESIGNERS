@@ -1,0 +1,23 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You!</title>
+</head>
+<body>
+    <h1>Thank You for Your Subscription!</h1>
+    <p>Your subscription has been activated. A confirmation email has been sent to your inbox.</p>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const email = urlParams.get('email');
+
+        if (email) {
+            // Here you can trigger a server-side function to send a thank you email
+            console.log(`Sending thank you email to: ${email}`);
+        }
+    </script>
+</body>
+</html>

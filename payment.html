@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=USD"></script>
+</head>
+<body>
+    <h1>Complete Your Payment</h1>
+    <form id="paymentForm">
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" name="email" required>
+
+        <p id="plan-details"></p>
+        <div id="paypal-button-container"></div>
+    </form>
+
+    <script>
+        // Get plan from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const plan = urlParams.get('plan');
+        let planPrice = 0;
+        let planName = '';
+
+        if (plan === 'planA') {
+            planPrice = 10;
+            planName = 'Plan A';
+        } else if (plan === 'planB') {
+            planPrice = 20;
+            planName = 'Plan B';
+        }
+
+        document.getElementById('plan-details').innerText = `You are purchasing: ${planName} for $${planPrice}/month`;
+
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: planPrice
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert('Payment completed!');
+                    const email = document.getElementById('email').value;
+                    window.location.href = `thankyou.html?email=${email}`;
+                });
+            }
+        }).render('#paypal-button-container');
+    </script>
+</body>
+</html>
